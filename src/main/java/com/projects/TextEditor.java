@@ -81,14 +81,22 @@ public class TextEditor extends JFrame {
 
         ActionListener findText = (e -> {
             if (!Objects.equals(textPanel.getTextArea().getText(), "") && !Objects.equals(optionPanel.getSearchField().getText(), "")) {
-                System.out.println("test");
                 searchEngine = new SearchEngine(textPanel.getTextArea().getText(), optionPanel.getSearchField().getText(), optionPanel.getUseRegExCheckBox().isSelected(), textPanel);
-                searchEngine.execute();}
+                searchEngine.execute();
+            }
         });
 
-        ActionListener next = (e -> searchEngine.next());
+        ActionListener next = (e -> {
+            if (searchEngine != null) {
+                searchEngine.next();
+            }
+        });
 
-        ActionListener prev = (e -> searchEngine.prev());
+        ActionListener prev = (e -> {
+            if (searchEngine != null) {
+                searchEngine.prev();
+            }
+        });
 
         optionPanel.getSaveButton().addActionListener(save);
         optionPanel.getLoadButton().addActionListener(load);

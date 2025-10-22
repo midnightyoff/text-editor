@@ -27,7 +27,7 @@ public class SearchEngine extends SwingWorker<List<int[]>, Void> {
     }
 
     @Override
-    protected List<int[]> doInBackground() throws Exception {
+    protected List<int[]> doInBackground() {
         return findMatches(text, query, useRegex);
     }
 
@@ -35,11 +35,12 @@ public class SearchEngine extends SwingWorker<List<int[]>, Void> {
     protected void done() {
         try {
             matches = get();
-            selectText(matches.getFirst()[0], matches.getFirst()[1]);
-            currentIndex = 0;
+            if (!matches.isEmpty()) {
+                selectText(matches.getFirst()[0], matches.getFirst()[1]);
+                currentIndex = 0;
+            }
         } catch (InterruptedException | ExecutionException e) {
             System.out.println("Error: " + e.getMessage());
-            ;
         }
     }
 
@@ -77,12 +78,16 @@ public class SearchEngine extends SwingWorker<List<int[]>, Void> {
     }
 
     public void next() {
-        currentIndex = (currentIndex + 1) % matches.size();
-        selectText(matches.get(currentIndex)[0], matches.get(currentIndex)[1]);
+        if (!matches.isEmpty()) {
+            currentIndex = (currentIndex + 1) % matches.size();
+            selectText(matches.get(currentIndex)[0], matches.get(currentIndex)[1]);
+        }
     }
 
     public void prev() {
-        currentIndex = (currentIndex - 1 + matches.size()) % matches.size();
-        selectText(matches.get(currentIndex)[0], matches.get(currentIndex)[1]);
+        if (!matches.isEmpty()) {
+            currentIndex = (currentIndex - 1 + matches.size()) % matches.size();
+            selectText(matches.get(currentIndex)[0], matches.get(currentIndex)[1]);
+        }
     }
 }
