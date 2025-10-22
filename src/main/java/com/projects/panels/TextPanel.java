@@ -1,4 +1,4 @@
-package com.projects;
+package com.projects.panels;
 
 import javax.swing.*;
 
@@ -22,7 +22,6 @@ public class TextPanel extends JPanel {
         layout.setVerticalGroup(layout
                 .createSequentialGroup()
                 .addComponent(scrollPane));
-        add(scrollPane);
     }
 
     public JScrollPane getScrollPane() {
