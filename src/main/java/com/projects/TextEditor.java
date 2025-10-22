@@ -2,6 +2,7 @@ package com.projects;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +10,7 @@ import java.nio.file.Paths;
 public class TextEditor extends JFrame {
     private final TextPanel textPanel = new TextPanel();
     private final OptionPanel optionPanel = new OptionPanel();
+    private final MenuBar menuBar = new MenuBar();
     private final String path = System.getProperty("user.dir") + "/src/main/java/com/projects/data/";
 
     TextEditor() {
@@ -28,8 +30,9 @@ public class TextEditor extends JFrame {
         setLayout(new BorderLayout());
         add(textPanel, BorderLayout.CENTER);
         add(optionPanel, BorderLayout.NORTH);
+        setJMenuBar(menuBar);
 
-        optionPanel.getLoadButton().addActionListener(e -> {
+        ActionListener load = (e -> {
             String fileName = optionPanel.getFileName().getText();
             try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(path + fileName))) {
                 StringBuilder text = new StringBuilder();
@@ -44,7 +47,7 @@ public class TextEditor extends JFrame {
             }
         });
 
-        optionPanel.getSaveButton().addActionListener(e -> {
+        ActionListener save = (e -> {
             String fileName = optionPanel.getFileName().getText();
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(path + fileName))) {
                 bufferedWriter.write(textPanel.getTextArea().getText());
@@ -52,5 +55,11 @@ public class TextEditor extends JFrame {
                 System.out.println("Error opening file: " + exception.getMessage());
             }
         });
+
+        optionPanel.getSaveButton().addActionListener(save);
+        optionPanel.getLoadButton().addActionListener(load);
+        menuBar.getSave().addActionListener(save);
+        menuBar.getLoad().addActionListener(load);
+        menuBar.getExit().addActionListener(e -> this.dispose());
     }
 }
